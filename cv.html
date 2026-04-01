@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lebenslauf – Jennifer Nicolay</title>
+  <style>
+    :root {
+      --bg: #380997;
+      --text: #f5f5f5;
+      --muted: #b8b8b8;
+      --accent: #f8f679;
+      --line: rgb(159, 158, 160);
+      --card: #4916af;
+      --link: #91b3d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      border: 1px solid rgba(255,255,255,0.15);
+      min-height: 100vh;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 36px;
+    }
+
+    .photo {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #1b1b1b, #0d0d0d);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .name {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(2.2rem, 5vw, 4.3rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .contact {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .personal-data {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 6px 18px;
+      max-width: 620px;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+
+    .personal-data dt {
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .personal-data dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .contact a {
+      color: var(--link);
+      text-decoration: underline;
+    }
+
+    .section {
+      margin-top: 34px;
+    }
+
+    .section-title {
+      color: var(--accent);
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      margin: 0 0 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+
+    .cv-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0 20px;
+      position: relative;
+    }
+
+    .cv-grid::before {
+      content: "";
+      position: absolute;
+      left: 150px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--line);
+      transform: translateX(10px);
+    }
+
+    .date {
+      padding: 6px 18px 18px 0;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      position: relative;
+    }
+
+    .entry {
+      padding: 0 0 22px 28px;
+    }
+
+    .entry h3 {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .entry .role,
+    .entry .institution,
+    .entry .location {
+      color: var(--muted);
+    }
+
+    .entry p {
+      margin: 7px 0;
+    }
+
+    .entry ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .entry li {
+      margin: 4px 0;
+    }
+
+    .compact-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .compact-list li {
+      margin-bottom: 6px;
+    }
+
+    .artist-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+    }
+
+    .artist-table th,
+    .artist-table td {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .artist-table th {
+      color: var(--accent);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+    }
+
+    .artist-table td:first-child {
+      width: 170px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media print {
+      body {
+        background: #000;
+      }
+
+      .page {
+        border: none;
+        padding: 20px 18px 30px;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .header {
+        grid-template-columns: 1fr;
+      }
+
+      .cv-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cv-grid::before {
+        display: none;
+      }
+
+      .entry {
+        padding-left: 0;
+      }
+
+      .date {
+        padding-bottom: 6px;
+      }
+
+      .artist-table,
+      .artist-table thead,
+      .artist-table tbody,
+      .artist-table th,
+      .artist-table td,
+      .artist-table tr {
+        display: block;
+      }
+
+      .artist-table thead {
+        display: none;
+      }
+
+      .artist-table td {
+        width: 100% !important;
+        border-bottom: none;
+        padding: 6px 0;
+      }
+
+      .artist-table tr {
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="photo">Foto hier einsetzen</div>
+      <div>
+        <h1 class="name">Jennifer<br />Nicolay</h1>
+        <div class="contact">
+          Niddagaustr. 82 | 60489 Frankfurt am Main<br />
+          <a href="mailto:nicolay.jennifer@gmail.com">nicolay.jennifer@gmail.com</a> |
+          <a href="https://www.jennifernicolay.de" target="_blank" rel="noreferrer">www.jennifernicolay.de</a>
+        </div>
+
+        <dl class="personal-data">
+          <dt>Geburtsdatum</dt>
+          <dd>[bitte ergänzen]</dd>
+          <dt>Geburtsort</dt>
+          <dd>[bitte ergänzen]</dd>
+          <dt>Staatsangehörigkeit</dt>
+          <dd>[optional]</dd>
+          <dt>Wohnort</dt>
+          <dd>Frankfurt am Main</dd>
+        </dl>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Berufliche Erfahrung</h2>
+      <div class="cv-grid">
+        <div class="date">Sept. 2021 – heute</div>
+        <div class="entry">
+          <h3>Azubi Digital Akademie gemeinnützige GmbH</h3>
+          <p class="role">Gründerin &amp; pädagogische Leitung</p>
+          <p>Die Azubi Digital Akademie ist ein Social Start-up zur Förderung von Bildungsgerechtigkeit für Jugendliche mit speziellem Fokus auf benachteiligte Jugendliche, IT-Förderung, Einstieg in Ausbildung sowie Ausbildungsbegleitung.</p>
+          <p>Kurs-Portfolio: Digital Skills, Hacker-Weeks, C-Programmierung, Python, HTML/CSS (Webseiten). Details und Kurs-Curricula: <a href="https://www.azubi.digital" target="_blank" rel="noreferrer">www.azubi.digital</a></p>
+        </div>
+
+        <div class="date">Juni 2017 – Juni 2023</div>
+        <div class="entry">
+          <h3>JOBLINGE gemeinnützige AG FrankfurtRheinMain</h3>
+          <p><strong>2021–2023:</strong> Auswahl zur ersten unternehmensinternen Stipendiatin: Mentoring und Förderung durch ein Social-Intrapreneurship-Programm mit dem Ziel, ein eigenes Social Start-up zu gründen und dieses bereits in Teilzeit aufzubauen.</p>
+          <p><strong>2019–2021:</strong> Projektleitung JOBLINGE basecamp Frankfurt: Aufbau eines innovativen Ortes zur Ausbildungsbegleitung benachteiligter Jugendlicher mit Schnittstelle zu Kunst und Kultur.</p>
+          <p><strong>2017–2019:</strong> Unternehmenskoordinatorin JOBLINGE Kompass, Schwerpunkt Praktikums- und Ausbildungsvermittlung von Geflüchteten, Standort Wiesbaden.</p>
+        </div>
+
+        <div class="date">Jan. 2016 – Dez. 2023</div>
+        <div class="entry">
+          <h3>THEOCACHing GbR</h3>
+          <p class="role">Geschäftsführende Gründerin</p>
+          <p>Konzept und Programmierung eines digitalen Kultur- und Bildungsangebots mit interaktiven Audio-Pfaden und Installationen für Jugendliche, Familien und Organisationen.</p>
+        </div>
+
+        <div class="date">Juni 2014 – Mai 2017</div>
+        <div class="entry">
+          <h3>Macondo Publishing GmbH</h3>
+          <p class="role">Redakteurin</p>
+          <p>Verfassen und Redigieren von Texten zu sozialunternehmerischem Engagement und ökologischer Nachhaltigkeit im Online-Magazin „Umweltdialog“ sowie in den Global-Compact-Jahrbüchern.</p>
+          <p>Projektleitung „CSR Manager“, Online-Redaktion und Webseiten-Betreuung, Betreuung des Web-Contents für das Umweltministerium NRW.</p>
+        </div>
+
+        <div class="date">Feb. 2012 – Dez. 2016</div>
+        <div class="entry">
+          <h3>Jugendburg Gemen</h3>
+          <p class="role">Mitglied des pädagogischen Teams</p>
+          <p>Planung, Durchführung und Nachbereitung von Orientierungstagen mit Schulklassen aller Schulformen (5.–13. Klasse).</p>
+          <p>Methodischer Schwerpunkt: systemisch-pädagogisches Arbeiten und Themenzentrierte Interaktion (TZI); Inhalte wurden prozessorientiert mit den Jugendlichen entwickelt.</p>
+        </div>
+
+        <div class="date">Sept. 2011 – Feb. 2012</div>
+        <div class="entry">
+          <h3>Luisengymnasium Düsseldorf</h3>
+          <p class="role">Lehrerin für Spanisch und Praktische Philosophie</p>
+          <p class="location">Elternzeitvertretung</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Akademische Ausbildung</h2>
+      <div class="cv-grid">
+        <div class="date">heute</div>
+        <div class="entry">
+          <h3>Studium Informatik B.Sc.</h3>
+          <p class="institution">FernUniversität in Hagen, Studienzentrum Campus Bockenheim, Frankfurt</p>
+        </div>
+
+        <div class="date">02/2021 – 11/2021</div>
+        <div class="entry">
+          <h3>42 School Heilbronn</h3>
+          <p>Studentin und Teilnehmerin am innovativen Peer-to-Peer-Lernkonzept der internationalen Coding-Schule 42.</p>
+          <p>Lerninhalte u. a.: C-Programmierung, Aufbau von virtuellen Servern, Python.</p>
+        </div>
+
+        <div class="date">09/2010 – 09/2011</div>
+        <div class="entry">
+          <h3>Stipendiatin der Kultusministerkonferenz</h3>
+          <p>Lehrtätigkeit für Deutsch als Fremdsprache; Fremdsprachenkorrespondentin im Rahmen des Deutschen Akademischen Austauschdienstes (DAAD) am Gymnasium „Instituto Rosario Acuña“ in Gijón, Spanien.</p>
+        </div>
+
+        <div class="date">10/2005 – 09/2006</div>
+        <div class="entry">
+          <h3>Studium Spanisch, Philosophie, Lehramt Gym/Ges</h3>
+          <p class="institution">Westfälische Wilhelms-Universität Münster &amp; Universität zu Köln</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Künstlerischer Werdegang</h2>
+      <table class="artist-table">
+        <thead>
+          <tr>
+            <th>Zeitraum</th>
+            <th>Tätigkeit / Station</th>
+            <th>Inhalt / Schwerpunkt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>09-10/2025</td>
+            <td>Working with Music - Erasmus Dozentin am Conservatorio di Musica Trapani</td>
+            <td>Organisation und Leitung gemeinsam mit Folkert Uhde: Hybrider Kurs für 16 Studierende zur Entwicklung eines Konzertformats in der Tonnara di Favignana, Sizilien (It.)</td>
+          </tr>
+          <tr>
+            <td>06/2025</td>
+            <td>Working with Music - Erasmus Dozentin am Conservatorio di Musica Trapani</td>
+            <td>Unterrichten von digitalen Tools für Musiker:innen zur eigenen Organisation und Projektentwicklung.</td>
+          </tr>
+          <tr>
+            <td>03/2025-heute</td>
+            <td>Künstlerische Mitarbeit im Umfeld der Naxos Hallenkonzerte, Frankfurt am Main</td>
+            <td>Mitarbeit im kuratorischen und künstlerischen Kontext innovativer Konzertformate; Auseinandersetzung mit zeitgenössischer Musik, Dramaturgie und interdisziplinären Aufführungsformaten.</td>
+          </tr>
+          <tr>
+            <td>2024–heute</td>
+            <td>Entwicklung interdisziplinärer Konzert- und Performanceformate</td>
+            <td>Konzeption und Umsetzung von Formaten zwischen Konzert, Installation, Musiktheater und digitaler Performance.</td>
+          </tr>
+          <tr>
+            <td>2024–heute</td>
+            <td>Kompositorische Arbeit mit Live-Elektronik und digitalen Medien</td>
+            <td>Arbeit mit Ableton Live, Sensorik, elektronischer Klangverarbeitung, algorithmischen Ansätzen und hybriden Notationsformen.</td>
+          </tr>
+          <tr>
+            <td>2025–heute</td>
+            <td>Künstlerische Forschung zu Klang, Raum und Transformation</td>
+            <td>Kompositorische Auseinandersetzung mit Themen wie Liminalität, Erinnerung, Resonanz, Verlust, Naturprozessen und gesellschaftlichen Spannungsfeldern.</td>
+          </tr>
+          <tr>
+            <td>2024–heute</td>
+            <td>Zusammenarbeit mit Musiker:innen und Performer:innen</td>
+            <td>Entwicklung und Erprobung eigener Stücke und performativer Konzepte im Austausch mit Interpret:innen.</td>
+          </tr>
+          <tr>
+            <td>2023–heute</td>
+            <td>Musikpädagogische und künstlerische Vermittlungsprojekte</td>
+            <td>Konzeption und Durchführung von Workshops und Projektformaten mit Schwerpunkt auf Klangforschung, Musik, Elektronik und kreativer Teilhabe.</td>
+          </tr>
+          <tr>
+            <td>2018</td>
+            <td>Digitale Audio-Impuls Skulpturenwanderung Landesgartenschau Bad Lippspringe</td>
+            <td>Auftrag für Theocaching GbR in Kooperation mit der Technik-Didaktik der Universität Paderborn</td>
+          </tr>
+          <tr>
+            <td>seit 2016</td>
+            <td>Entwicklung interaktiver Kultur- und Bildungsformate</td>
+            <td>Konzeption digitaler und auditiver Formate, u. a. mit interaktiven Audio-Pfaden und installativen Elementen.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Weitere Qualifikationen</h2>
+      <ul class="compact-list">
+        <li>03/2023: Weiterbildung Achtsamkeitstrainerin &amp; Achtsamkeits-Coach</li>
+        <li>06/2022: Weiterbildung „Mental Health First Aid“</li>
+        <li>05/2022: Weiterbildung und Auffrischung Systemisches Arbeiten für die berufliche Praxis in der Arbeit mit sozial benachteiligten Jugendlichen</li>
+        <li>2014–2015: Ausbildung in systemischen Grundlagen für Pädagog:innen</li>
+        <li>2014: Fortbildung in Themenzentrierter Interaktion (TZI)</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Ehrenamt &amp; Kultur</h2>
+      <ul class="compact-list">
+        <li>2016–2018: Herausgeberin und Redakteurin der feministisch-interreligiösen Zeitschrift INTA Forum</li>
+        <li>2013–2018: Vorstandsvorsitzende des wirtschaftsethischen Netzwerks sneep e.V. (student network for ethics in economics &amp; practice)</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Speakerin</h2>
+      <ul class="compact-list">
+        <li>2016: Referentin auf dem Jugend Lab und dem Zukunftskongress des Bundesministeriums für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ) in München</li>
+        <li>2016: Referentin auf dem Global Ethics Forum in Genf zum Thema Ethics &amp; Education</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Sprachkenntnisse</h2>
+      <ul class="compact-list">
+        <li>Deutsch (Muttersprache)</li>
+        <li>Englisch (sehr gut in Wort und Schrift)</li>
+        <li>Spanisch (sehr gut in Wort und Schrift)</li>
+        <li>Italienisch (sehr gut in Alltags- und musikalischer Fachsprache)</li>
+        <li>Französisch (gute allgemeine Kenntnisse)</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
