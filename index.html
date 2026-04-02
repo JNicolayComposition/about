@@ -45,7 +45,7 @@
     }
 
     .page {
-      width: min(1280px, calc(100% - 28px));
+      width: min(1380px, calc(100% - 32px));
       margin: 0 auto;
       padding: 26px 0 48px;
     }
@@ -78,10 +78,13 @@
     }
 
     .lead {
-      max-width: 760px;
+      max-width: 820px;
       color: var(--text);
       font-size: 1.04rem;
       margin: 0;
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
     }
 
     .legend {
@@ -111,8 +114,8 @@
 
     .network-wrap {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) 360px;
-      gap: 20px;
+      grid-template-columns: minmax(0, 1.35fr) 380px;
+      gap: 22px;
       align-items: start;
     }
 
@@ -125,7 +128,7 @@
     }
 
     .network-panel {
-      padding: 16px;
+      padding: 22px;
       overflow: hidden;
     }
 
@@ -186,7 +189,7 @@
     }
 
     .info-panel {
-      padding: 22px;
+      padding: 24px;
       position: sticky;
       top: 20px;
     }
@@ -202,6 +205,9 @@
     .info-panel p {
       margin: 0 0 14px;
       color: var(--muted);
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
     }
 
     .info-list {
@@ -222,11 +228,22 @@
     }
 
     .section-card {
+      display: block;
       background: rgba(73, 22, 175, 0.76);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 22px;
-      padding: 20px;
+      padding: 22px;
       box-shadow: 0 16px 34px var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .section-card:hover,
+    .section-card:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.32);
+      border-color: rgba(248, 246, 121, 0.45);
+      outline: none;
     }
 
     .section-card h3 {
@@ -240,6 +257,9 @@
     .section-card p {
       margin: 0;
       color: var(--muted);
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
     }
 
     footer {
@@ -266,7 +286,7 @@
 
     @media (max-width: 760px) {
       .page {
-        width: min(100% - 16px, 1280px);
+        width: min(100% - 16px, 1380px);
       }
 
       .hero,
@@ -325,31 +345,31 @@
             <text class="station-sub" x="635" y="191">Start · Übersicht · Navigation</text>
           </a>
 
-          <a class="station-link" href="https://JNicolayComposition.github.io/about/cv.html" target="_blank" rel="noreferrer">
+          <a class="station-link" href="https://www.jennifernicolay.de" target="_blank" rel="noreferrer">
             <circle class="station-core" cx="220" cy="90" r="12"></circle>
             <text class="station-label" x="244" y="94">Website</text>
-            <text class="station-sub" x="244" y="114">Biografie · Kontakt · Projekte</text>
+            <text class="station-sub" x="244" y="114">Biografie · Kontakt · zentrale Präsenz</text>
           </a>
 
-          <a class="station-link" href="https://github.com/JNicolayComposition/about/index.html">
+          <a class="station-link" href="#github">
             <circle class="station-core" cx="220" cy="340" r="12"></circle>
             <text class="station-label" x="246" y="344">GitHub</text>
             <text class="station-sub" x="246" y="364">Code · Prototypen · Webprojekte</text>
           </a>
 
-          <a class="station-link" href="https://www.linkedin.com/in/jennifer-nicolay1601/">
+          <a class="station-link" href="#linkedin">
             <circle class="station-core" cx="220" cy="620" r="12"></circle>
             <text class="station-label" x="246" y="624">LinkedIn</text>
             <text class="station-sub" x="246" y="644">Beruf · Netzwerk · Projekte</text>
           </a>
 
-          <a class="station-link" href="https://www.youtube.com/@Junicornus">
+          <a class="station-link" href="#youtube">
             <circle class="station-core" cx="220" cy="760" r="12"></circle>
             <text class="station-label" x="246" y="764">YouTube</text>
             <text class="station-sub" x="246" y="784">Videos · Tutorials · Mitschnitte</text>
           </a>
 
-          <a class="station-link" href="https://azubi.digital">
+          <a class="station-link" href="#azubi-digital">
             <circle class="station-core" cx="360" cy="420" r="12"></circle>
             <text class="station-label" x="386" y="424">Azubi Digital</text>
             <text class="station-sub" x="386" y="444">Arbeit · Bildung · Social Startup</text>
@@ -357,23 +377,23 @@
 
           <a class="station-link" href="#paedagogik">
             <circle class="station-core" cx="360" cy="700" r="12"></circle>
-            <text class="station-label" x="386" y="704">Pädagogik (i.A.)</text>
+            <text class="station-label" x="386" y="704">Pädagogik</text>
             <text class="station-sub" x="386" y="724">Workshops · Vermittlung · Jugend</text>
           </a>
 
           <a class="station-link" href="#kunstprojekte">
             <circle class="station-core" cx="110" cy="180" r="12"></circle>
-            <text class="station-label" x="136" y="184">Kunstprojekte (i.A.)</text>
+            <text class="station-label" x="136" y="184">Kunstprojekte</text>
             <text class="station-sub" x="136" y="204">Komposition · Performance · Konzepte</text>
           </a>
 
-          <a class="station-link" href="https://github.com/JNicolayComposition/compositions">
+          <a class="station-link" href="#komposition">
             <circle class="station-core" cx="360" cy="180" r="12"></circle>
             <text class="station-label" x="386" y="184">Komposition</text>
             <text class="station-sub" x="386" y="204">Scores · Stücke · Klangforschung</text>
           </a>
 
-          <a class="station-link" href="https://github.com/JNicolayComposition/compositions">
+          <a class="station-link" href="#live-elektronik">
             <circle class="station-core" cx="860" cy="180" r="12"></circle>
             <text class="station-label" x="886" y="184">Live-Elektronik</text>
             <text class="station-sub" x="886" y="204">Ableton · Sensorik · elektronische Praxis</text>
@@ -391,92 +411,105 @@
             <text class="station-sub" x="901" y="404">Aufführungen · Mitschnitte · Programme</text>
           </a>
 
-          <a class="station-link" href="https://safe-in-sound.art">
+          <a class="station-link" href="#kollektiv">
             <circle class="station-core" cx="1090" cy="620" r="12"></circle>
             <text class="station-label" x="913" y="620">Kollektiv</text>
             <text class="station-sub" x="913" y="640">Kooperationen · gemeinsame Vorhaben</text>
           </a>
 
-          <a class="station-link" href="https://www.schott-music.com/de/kuenstlerisch-intelligent-no771743.html">
+          <a class="station-link" href="#forschung">
             <circle class="station-core" cx="610" cy="430" r="12"></circle>
-            <text class="station-label" x="635" y="434">Veröffentlichungen</text>
-            <text class="station-sub" x="635" y="454">Klang · Neue Musik · Pädagogik</text>
+            <text class="station-label" x="635" y="434">Forschung</text>
+            <text class="station-sub" x="635" y="454">Klang · Raum · Transformation</text>
           </a>
 
-          <a class="station-link" href="mailto:jennifer.nicolay+git@posteo.de">
+          <a class="station-link" href="#kontakt">
             <circle class="station-core" cx="610" cy="700" r="12"></circle>
             <text class="station-label" x="635" y="704">Kontakt</text>
             <text class="station-sub" x="635" y="724">Mail · Website · Anfragen</text>
           </a>
 
-          <text class="floating-note" x="940" y="760">Alle Stationen führen zu Links, Unterseiten oder GitHub-Repositories.</text>
+          <text class="floating-note" x="940" y="760">Alle Stationen können zu externen Links, Unterseiten oder GitHub-Repositories führen.</text>
         </svg>
       </div>
 
       <aside class="info-panel" id="home">
         <h2>Wie die Karte funktioniert</h2>
-        <p>Die Seite ist als poetische Netzkarte gedacht. Jede Station ist anklickbar und verweist auf eine Station meines beruflichen und künstlerischen Lebens.</p>
+        <p>Die Seite ist als poetische Netzkarte gedacht. Jede Station ist anklickbar und verweist auf eine externe Seite, ein Repository oder einen internen Abschnitt.</p>
         <ul class="info-list">
           <li><strong>Central Hub</strong> ist der Ausgangspunkt.</li>
           <li><strong>Linien</strong> bündeln zusammengehörige Bereiche.</li>
           <li><strong>Umsteigestationen</strong> markieren besonders zentrale Knoten meiner Praxis.</li>
+          <li><strong>Objekte</strong> wie Konzerte, Kollektive oder Forschung können ebenfalls als Stationen erscheinen.</li>
         </ul>
       </aside>
     </section>
 
     <section class="sections">
-      <article class="section-card" id="kunstprojekte">
+      <a class="section-card" id="kunstprojekte" href="https://example.com/kunstprojekte">
         <h3>Kunstprojekte</h3>
         <p>Performanceformate, audiovisuelle Arbeiten und kuratierte künstlerische Projekte.</p>
-      </article>
-      <article class="section-card" id="komposition">
+      </a>
+
+      <a class="section-card" id="komposition" href="https://example.com/komposition">
         <h3>Komposition</h3>
         <p>Sammlung von Partituren, Konzepten, Hybridnotationen, Skizzen und Werkbeschreibungen.</p>
-      </article>
-      <article class="section-card" id="live-elektronik">
+      </a>
+
+      <a class="section-card" id="live-elektronik" href="https://example.com/live-elektronik">
         <h3>Live-Elektronik</h3>
         <p>Setups, Tools, technische Strukturen und künstlerische Anwendungen von Elektronik und Sensorik.</p>
-      </article>
-      <article class="section-card" id="azubi-digital">
+      </a>
+
+      <a class="section-card" id="azubi-digital" href="https://example.com/azubi-digital">
         <h3>Azubi Digital</h3>
         <p>Soziale Bildungsarbeit, digitale Kurse, IT-Vermittlung und Projekte zur Bildungsgerechtigkeit.</p>
-      </article>
-      <article class="section-card" id="paedagogik">
+      </a>
+
+      <a class="section-card" id="paedagogik" href="https://example.com/paedagogik">
         <h3>Pädagogik</h3>
         <p>Musikpädagogik, CultureLab, Jugendprojekte, Workshops und interaktive Vermittlungsformate.</p>
-      </article>
-      <article class="section-card" id="konzerte">
+      </a>
+
+      <a class="section-card" id="konzerte" href="https://example.com/konzerte">
         <h3>Konzerte</h3>
         <p>Programme, Auftritte, Konzertdramaturgie, Mitwirkungen und Dokumentationen von Aufführungen.</p>
-      </article>
-      <article class="section-card" id="kollektiv">
+      </a>
+
+      <a class="section-card" id="kollektiv" href="https://example.com/kollektiv">
         <h3>Kollektiv</h3>
         <p>Gemeinsame Initiativen, künstlerische Kooperationen, Produktionszusammenhänge und Netzwerke.</p>
-      </article>
-      <article class="section-card" id="forschung">
+      </a>
+
+      <a class="section-card" id="forschung" href="https://example.com/forschung">
         <h3>Forschung</h3>
         <p>Interessen in Klang, Raum, Wahrnehmung, Transformation, digitaler Ästhetik und gesellschaftlicher Relevanz.</p>
-      </article>
-      <article class="section-card" id="github">
+      </a>
+
+      <a class="section-card" id="github" href="https://github.com/">
         <h3>GitHub</h3>
         <p>Technische Prototypen, Webseiten, experimentelle Interfaces und offene Arbeitsstände.</p>
-      </article>
-      <article class="section-card" id="instagram">
+      </a>
+
+      <a class="section-card" id="instagram" href="https://instagram.com/" target="_blank" rel="noreferrer">
         <h3>Instagram</h3>
         <p>Einblicke in Prozesse, Studio- und Probenmomente, Bildsprache und kurze Projektfenster.</p>
-      </article>
-      <article class="section-card" id="linkedin">
+      </a>
+
+      <a class="section-card" id="linkedin" href="https://linkedin.com/" target="_blank" rel="noreferrer">
         <h3>LinkedIn</h3>
         <p>Berufliche Kontexte, Bildungsarbeit, Netzwerke und übergreifende Projektpräsentation.</p>
-      </article>
-      <article class="section-card" id="youtube">
+      </a>
+
+      <a class="section-card" id="youtube" href="https://youtube.com/" target="_blank" rel="noreferrer">
         <h3>YouTube</h3>
         <p>Videoarbeiten, Tutorials, Mitschnitte, Dokumentationen und performative Formate in Bewegung.</p>
-      </article>
-      <article class="section-card" id="kontakt">
+      </a>
+
+      <a class="section-card" id="kontakt" href="mailto:nicolay.jennifer@gmail.com">
         <h3>Kontakt</h3>
         <p>Mail, Website, Anfragen zu Zusammenarbeit, Konzerten, Workshops, pädagogischen oder digitalen Projekten.</p>
-      </article>
+      </a>
     </section>
 
     <footer>
