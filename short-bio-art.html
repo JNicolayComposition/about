@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jennifer Nicolay – Artistic CV</title>
+  <style>
+    :root {
+      --bg: #380997;
+      --text: #f5f5f5;
+      --muted: #c6c6d1;
+      --accent: #f8f679;
+      --card: #4916af;
+      --line: rgba(248, 246, 121, 0.18);
+      --shadow: rgba(0, 0, 0, 0.25);
+      --link: #91b3d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(248, 246, 121, 0.1), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(145, 179, 213, 0.14), transparent 28%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    .card {
+      background: rgba(73, 22, 175, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 20px 40px var(--shadow);
+      padding: 30px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.78rem;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .intro {
+      color: var(--text);
+      font-size: 1.02rem;
+      margin: 0 0 28px;
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
+    }
+
+    .section {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .section p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 26px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 16px, 900px);
+        padding: 20px 0 36px;
+      }
+
+      .card {
+        padding: 22px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <span class="eyebrow">Artistic CV</span>
+      <h1>Jennifer Nicolay</h1>
+
+      <p class="intro">
+        Jennifer Nicolay is a Frankfurt-based artist, composer, educator, and digital developer working across
+        composition, live electronics, performance, participatory artistic formats, and digital mediation.
+        Her practice connects sound, code, pedagogy, curatorial thinking, and collaborative creation.
+      </p>
+
+      <div class="section">
+        <h2>Profile</h2>
+        <p>
+          Her artistic work moves between contemporary music, interdisciplinary performance, electronic sound,
+          and hybrid formats that combine acoustic instruments, digital tools, spatial thinking, and conceptual design.
+          A particular focus lies in linking artistic experimentation with social relevance and educational practice.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Current Focus</h2>
+        <p>
+          Current focal points include contemporary music performance, live electronics, machine learning for artistic
+          practice, collaborative concert dramaturgy, and music-and-electronics projects with children and young people.
+          She develops artistic and pedagogical formats in which sound, movement, objects, code, and participation
+          become equally important compositional elements.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Artistic Practice</h2>
+        <p>
+          Her work includes compositions, live electronic settings, performance concepts, educational workshop formats,
+          curatorial collaboration, and digital development. Across these fields, she is interested in liminality,
+          resonance, transformation, memory, and the aesthetic possibilities of technological mediation.
+        </p>
+      </div>
+
+      <a class="back-link" href="index.html">← Back to network map</a>
+    </section>
+  </main>
+</body>
+</html>
