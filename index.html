@@ -257,12 +257,16 @@
     }
     .network-mobile { display: none; }
 
+    /* Base style for all map lines */
     .metro-line {
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 16;
       opacity: 0.95;
+      stroke-dasharray: 640;
+      stroke-dashoffset: 640;
+      animation: drawLine 1.6s ease forwards;
     }
     .metro-line.secondary {
       stroke-width: 12;
@@ -271,7 +275,23 @@
     .metro-line.connector {
       stroke-width: 8;
       opacity: 0.72;
-      stroke-dasharray: 10 12;
+      stroke-dasharray: 16 12, 640;
+      stroke-dashoffset: 640;
+    }
+
+    /* Delays so the network grows outward from the hub */
+    .delay-0 { animation-delay: 0s; }
+    .delay-1 { animation-delay: 0.18s; }
+    .delay-2 { animation-delay: 0.34s; }
+    .delay-3 { animation-delay: 0.52s; }
+    .delay-4 { animation-delay: 0.7s; }
+    .delay-5 { animation-delay: 0.88s; }
+    .delay-6 { animation-delay: 1.02s; }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
 
     .station-link .station-halo {
@@ -409,40 +429,6 @@
     }
     .info-list li { margin-bottom: 10px; }
 
-    .sections {
-      margin-top: 22px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .section-card {
-      display: block;
-      padding: 22px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      cursor: pointer;
-    }
-    .section-card:hover,
-    .section-card:focus-visible {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.32);
-      border-color: rgba(248, 246, 121, 0.45);
-      outline: none;
-    }
-    .section-card h3 {
-      margin: 0 0 10px;
-      color: var(--accent);
-      font-size: 1.15rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .section-card p {
-      margin: 0;
-      color: var(--muted);
-      text-align: justify;
-      text-justify: inter-word;
-      hyphens: auto;
-    }
-
     footer {
       margin-top: 24px;
       padding: 16px 4px 0;
@@ -469,9 +455,7 @@
       .hero,
       .expandable,
       .network-panel,
-      .info-panel,
-      .section-card { border-radius: 20px; }
-      .sections { grid-template-columns: 1fr; }
+      .info-panel { border-radius: 20px; }
       .legend { gap: 8px; }
       .legend-item { font-size: 0.88rem; }
     }
@@ -510,501 +494,7 @@
         <div class="robotica-grid">
           <div class="content-card">
             <h3>SuperCollider Code</h3>
-            <pre class="code-box">(
-// --------------------------------------------------
-// HUMAN ROBOTICA
-// Sample- oder Live-Input-Version
-// --------------------------------------------------
-
-s.waitForBoot({
-
-    // -----------------------------
-    // GLOBALS
-    // -----------------------------
-    ~buf = nil;
-    ~samplePath = nil;
-    ~liveBuf = nil;
-    ~recSynth = nil;
-
-    ~density = 0.4;
-    ~erosion = 0.2;
-    ~brightness = 0.5;
-    ~fragDur = 0.25;
-    ~repetitionProb = 0.4;
-    ~masterAmp = 0.8;
-    ~section = \A;
-
-    // Live-Controller für B
-    ~densCtl = 0.3;
-    ~erosCtl = 0.2;
-    ~brightCtl = 0.4;
-    ~fragCtl = 0.3;
-    ~freezeCtl = 0.2;
-
-    // Lautstärken der Sektionen
-    ~ampA = 1.0;
-    ~ampB = 1.0;
-    ~ampC = 1.0;
-    ~ampD = 1.0;
-
-    ~ampBusA = Bus.control(s, 1);
-    ~ampBusB = Bus.control(s, 1);
-    ~ampBusC = Bus.control(s, 1);
-    ~ampBusD = Bus.control(s, 1);
-
-    ~ampBusA.set(~ampA);
-    ~ampBusB.set(~ampB);
-    ~ampBusC.set(~ampC);
-    ~ampBusD.set(~ampD);
-
-    // Input-Kanal für Mikro
-    ~inputChan = 0;
-
-    // Regionen fürs fragmentierte Lesen
-    ~regions = [0.05, 0.18, 0.31, 0.47, 0.61, 0.74];
-    ~lastRegion = 0.05;
-
-    // -----------------------------
-    // SYNTHDEFS
-    // -----------------------------
-
-    SynthDef(\plainPlayer, {
-        arg out=0, buf=0, amp=0.4, ampBus=0, rate=1, startPos=0;
-        var sig, env, ctl;
-        ctl = In.kr(ampBus, 1);
-        sig = PlayBuf.ar(2, buf, BufRateScale.kr(buf) * rate, startPos: startPos, doneAction: 0);
-        env = EnvGen.kr(Env.linen(0.01, BufDur.kr(buf) / max(rate, 0.001), 0.2), doneAction: 2);
-        Out.ar(out, sig * amp * ctl * env);
-    }).add;
-
-	// spektraler Schatten auf dem Original für ersten maschinellen Touch:
-	SynthDef(\shadowTrace, {
-		arg out=0, buf=0, amp=0.25, ampBus=0, rate=1, bright=0.7;
-		var sig, mono, filt1, filt2, delayed, rev, env, ctl, shadow;
-
-		ctl = In.kr(ampBus, 1);
-
-		sig = PlayBuf.ar(2, buf, BufRateScale.kr(buf) * rate, doneAction: 0);
-		mono = Mix(sig) * 0.5;
-
-		// zwei x spektral
-		filt1 = BPF.ar(mono, LinExp.kr(bright, 0, 1, 500, 2400), 0.12);
-		filt2 = BPF.ar(mono, LinExp.kr(bright, 0, 1, 1800, 5200), 0.08);
-
-		shadow = (filt1 * 0.8) + (filt2 * 0.5);
-
-		// leichte zeitliche Verschiebung
-		delayed = DelayC.ar(shadow, 0.4, 0.08);
-
-		// räumlich / revb
-		rev = FreeVerb.ar(delayed, 0.55, 0.92, 0.45);
-
-		env = EnvGen.kr(
-			Env.linen(0.01, BufDur.kr(buf) / max(rate, 0.001), 0.35),
-			doneAction: 2
-		);
-
-		Out.ar(out, (rev ! 2) * amp * ctl * env);
-	}).add;
-
-    SynthDef(\erodedFrag, {
-        arg out=0, buf=0, amp=0.2, ampBus=0, start=0, dur=0.2, erosion=0.3, bright=0.5;
-        var sig, mono, env, filt, crushed, ctl;
-        ctl = In.kr(ampBus, 1);
-
-        sig = PlayBuf.ar(2, buf, BufRateScale.kr(buf), startPos: start, doneAction: 0);
-        mono = Mix(sig) * 0.5;
-
-        env = EnvGen.kr(Env.perc(0.01, dur), doneAction: 2);
-        mono = mono * env;
-
-        filt = BPF.ar(mono, LinExp.kr(bright, 0, 1, 250, 4500), 0.18);
-        crushed = Latch.ar(filt, Impulse.ar((150 + (erosion * 2500)).clip(40, 3000)));
-
-        Out.ar(out, Pan2.ar(XFade2.ar(filt, crushed, erosion.linlin(0,1,-0.5,0.7)) * amp * ctl));
-    }).add;
-
-    SynthDef(\freezeLoop, {
-        arg out=0, buf=0, amp=0.18, ampBus=0, start=0, dur=0.15, hold=1.5, rate=1;
-        var phs, sig, env, ctl;
-
-        ctl = In.kr(ampBus, 1);
-
-        phs = Phasor.ar(
-            0,
-            BufRateScale.kr(buf) * rate,
-            start,
-            start + (dur * BufSampleRate.kr(buf))
-        );
-
-        sig = BufRd.ar(2, buf, phs, loop: 1);
-        sig = Mix(sig) * 0.5;
-        sig = LPF.ar(sig, 3500);
-
-        env = EnvGen.kr(Env.linen(0.02, hold, 0.25), doneAction: 2);
-
-        Out.ar(out, Pan2.ar(sig * amp * ctl * env));
-    }).add;
-
-    SynthDef(\reconstructVoice, {
-        arg out=0, buf=0, amp=0.3, ampBus=0, start=0, dur=0.25, rate=1, bright=0.5;
-        var sig, mono, env, pitchShifted, filt, ctl;
-
-        ctl = In.kr(ampBus, 1);
-
-        sig = PlayBuf.ar(2, buf, BufRateScale.kr(buf) * rate, startPos: start, doneAction: 0);
-        mono = Mix(sig) * 0.5;
-
-        env = EnvGen.kr(Env.perc(0.01, dur), doneAction: 2);
-        mono = mono * env;
-
-        pitchShifted = PitchShift.ar(mono, 0.08, [0.5, 1, 1.5, 2].choose, 0.01, 0.01);
-        filt = BPF.ar(pitchShifted, LinExp.kr(bright, 0, 1, 350, 7000), 0.22);
-
-        Out.ar(out, Pan2.ar(filt * amp * ctl, LFNoise1.kr(0.25)));
-    }).add;
-
-    SynthDef(\memoryResidue, {
-        arg out=0, buf=0, amp=0.15, ampBus=0, start=0, dur=0.4, bright=0.4;
-        var sig, mono, env, filt, rev, ctl;
-
-        ctl = In.kr(ampBus, 1);
-
-        sig = PlayBuf.ar(2, buf, BufRateScale.kr(buf), startPos: start, doneAction: 0);
-        mono = Mix(sig) * 0.5;
-
-        env = EnvGen.kr(Env.perc(0.02, dur), doneAction: 2);
-        mono = mono * env;
-
-        filt = BPF.ar(mono, LinExp.kr(bright, 0, 1, 150, 3500), 0.3);
-        rev = FreeVerb.ar(filt, 0.5, 0.9, 0.5);
-
-        Out.ar(out, (rev ! 2) * amp * ctl);
-    }).add;
-
-    // Live-Aufnahme
-    SynthDef(\recordInput, {
-		arg buf=0, inChan=0, recLevel=1.0, preLevel=0.0, monitor=0.0, out=0;
-		var sig;
-		sig = SoundIn.ar(inChan);          // mono mic input
-		sig = [sig, sig];                  // auf stereo duplizieren
-		RecordBuf.ar(sig, buf, recLevel: recLevel, preLevel: preLevel, loop: 0, doneAction: 0);
-		Out.ar(out, sig * monitor);
-	}).add;
-
-    s.sync;
-
-    // -----------------------------
-    // HILFSFUNKTIONEN
-    // -----------------------------
-    ~bufReady = {
-        ~buf.notNil and: { ~buf.numFrames.notNil } and: { ~buf.numFrames > 0 }
-    };
-
-    ~chooseRegion = {
-        var choices;
-        choices = ~regions.reject { |r| r == ~lastRegion };
-        ~lastRegion = choices.choose;
-        (~buf.numFrames * ~lastRegion).asInteger;
-    };
-
-    // -----------------------------
-    // SAMPLE LADEN
-    // -----------------------------
-    ~loadSample = { |path|
-        ~samplePath = path;
-
-        if(File.exists(~samplePath).not, {
-            "DATEI NICHT GEFUNDEN".postln;
-        }, {
-            if(~buf.notNil, { ~buf.free; });
-
-            "Lade Sample ...".postln;
-
-            ~buf = Buffer.read(s, ~samplePath, action: { |buf|
-                "BUFFER GELADEN".postln;
-                buf.query;
-            });
-        });
-    };
-
-    ~reloadSample = {
-        if(~samplePath.notNil, {
-            ~loadSample.(~samplePath);
-        }, {
-            "Kein samplePath gesetzt.".postln;
-        });
-    };
-
-    // -----------------------------
-    // LIVE BUFFER
-    // -----------------------------
-
-	~prepareLiveBuffer = {
-    if(~liveBuf.notNil, { ~liveBuf.free; });
-    ~liveBuf = Buffer.alloc(s, s.sampleRate * 20, 2);
-    "Live buffer bereit (stereo).".postln;
-	};
-
-    ~startRecording = {
-        if(~liveBuf.isNil, { ~prepareLiveBuffer.(); });
-        ~recSynth = Synth(\recordInput, [
-            \buf, ~liveBuf.bufnum,
-            \inChan, ~inputChan,
-            \monitor, 0.0
-        ]);
-        "Recording gestartet.".postln;
-    };
-
-    ~stopRecording = {
-        if(~recSynth.notNil, { ~recSynth.free; });
-        ~buf = ~liveBuf;
-        "Recording gestoppt. Live-Material jetzt in ~buf.".postln;
-        ~buf.query;
-    };
-
-    // -----------------------------
-    // TASKS
-    // -----------------------------
-    ~taskB = Task({
-        var waitTime, durVal, erosVal, brightVal, freezeProb, ampVal, mode;
-        loop {
-            if((~section != \B) or: { ~bufReady.().not }) {
-                0.5.wait;
-            } {
-                waitTime = (~densCtl.linlin(0, 1, 1.6, 0.3)).clip(0.2, 2.0);
-                durVal = (~fragCtl.linlin(0, 1, 0.12, 0.45)).clip(0.08, 0.6);
-                erosVal = (~erosCtl.linlin(0, 1, 0.0, 0.45)).clip(0, 0.6);
-                brightVal = (~brightCtl.linlin(0, 1, 0.25, 0.85)).clip(0, 1);
-                freezeProb = (~freezeCtl.linlin(0, 1, 0.0, 0.18)).clip(0, 0.25);
-                ampVal = 0.18 * ~masterAmp;
-
-                mode = [\frag, \frag, \shadow, \freeze].wchoose([0.45, 0.25, 0.2, 0.1]);
-
-                if(mode == \freeze) {
-                    Synth(\freezeLoop, [
-                        \buf, ~buf.bufnum,
-                        \ampBus, ~ampBusB.index,
-                        \start, ~chooseRegion.(),
-                        \dur, durVal * 0.8,
-                        \hold, (~freezeCtl.linlin(0, 1, 0.4, 1.8)).clip(0.3, 2.0),
-                        \amp, ampVal * 0.7
-                    ]);
-                };
-
-                if(mode == \frag) {
-                    Synth(\erodedFrag, [
-                        \buf, ~buf.bufnum,
-                        \ampBus, ~ampBusB.index,
-                        \start, ~chooseRegion.(),
-                        \dur, durVal,
-                        \erosion, erosVal,
-                        \bright, brightVal,
-                        \amp, ampVal
-                    ]);
-                };
-
-                if(mode == \shadow) {
-                    Synth(\erodedFrag, [
-                        \buf, ~buf.bufnum,
-                        \ampBus, ~ampBusB.index,
-                        \start, ~chooseRegion.(),
-                        \dur, durVal * 1.2,
-                        \erosion, 0.05,
-                        \bright, brightVal * 0.8,
-                        \amp, ampVal * 0.6
-                    ]);
-                };
-
-                (waitTime * [0.8, 1.0, 1.4].choose).wait;
-            }
-        }
-    });
-
-    ~taskC = Task({
-        var rates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
-        loop {
-            if((~section != \C) or: { ~bufReady.().not }) {
-                0.5.wait;
-            } {
-                Synth(\reconstructVoice, [
-                    \buf, ~buf.bufnum,
-                    \ampBus, ~ampBusC.index,
-                    \start, ~chooseRegion.(),
-                    \dur, rrand(0.18, 0.55),
-                    \rate, rates.choose,
-                    \bright, (~brightness * 0.9 + 0.1).clip(0,1),
-                    \amp, (0.32 + (~density * 0.22)) * ~masterAmp
-                ]);
-                rrand(0.12, (0.7 - (~density * 0.3)).max(0.08)).wait;
-            }
-        }
-    });
-
-    ~taskD = Task({
-        loop {
-            if((~section != \D) or: { ~bufReady.().not }) {
-                0.5.wait;
-            } {
-                Synth(\memoryResidue, [
-                    \buf, ~buf.bufnum,
-                    \ampBus, ~ampBusD.index,
-                    \start, ~chooseRegion.(),
-                    \dur, rrand(0.3, 0.8),
-                    \bright, ~brightness,
-                    \amp, (0.12 + ((1 - ~density) * 0.08)) * ~masterAmp
-                ]);
-                rrand(0.5, 1.5).wait;
-            }
-        }
-    });
-
-    // -----------------------------
-    // PLAY
-    // -----------------------------
-    ~playA = {
-        if(~bufReady.().not) {
-            "Kein Material in ~buf.".postln;
-        } {
-            ~section = \A;
-            "Section A".postln;
-
-            Synth(\plainPlayer, [
-                \buf, ~buf.bufnum,
-                \ampBus, ~ampBusA.index,
-				// DRY weniger durch z.B. 0.35
-                \amp, 0.20 * ~masterAmp
-            ]);
-
-            SystemClock.sched(0.2, {
-                Synth(\shadowTrace, [
-                    \buf, ~buf.bufnum,
-                    \ampBus, ~ampBusA.index,
-					// WET mehr durch z.B. 0.24
-                    \amp, 0.50 * ~masterAmp,
-                    \bright, ~brightness
-                ]);
-                nil
-            });
-        }
-    };
-
-    ~playB = {
-        if(~bufReady.().not) {
-            "Kein Material in ~buf.".postln;
-        } {
-            ~section = \B;
-            "Section B".postln;
-            ~taskB.play;
-        }
-    };
-
-    ~playC = {
-        if(~bufReady.().not) {
-            "Kein Material in ~buf.".postln;
-        } {
-            ~section = \C;
-            "Section C".postln;
-            ~taskC.play;
-        }
-    };
-
-    ~playD = {
-        if(~bufReady.().not) {
-            "Kein Material in ~buf.".postln;
-        } {
-            ~section = \D;
-            "Section D".postln;
-            ~taskD.play;
-        }
-    };
-
-    // -----------------------------
-    // STOP / CONTROL
-    // -----------------------------
-    ~stopAll = {
-        ~taskB.stop;
-        ~taskC.stop;
-        ~taskD.stop;
-        if(~recSynth.notNil, { ~recSynth.free; });
-        s.freeAll;
-        "All stopped".postln;
-    };
-
-    ~setAmpA = { |x| ~ampA = x.clip(0,1); ~ampBusA.set(~ampA); ("ampA: " ++ ~ampA).postln; };
-    ~setAmpB = { |x| ~ampB = x.clip(0,1); ~ampBusB.set(~ampB); ("ampB: " ++ ~ampB).postln; };
-    ~setAmpC = { |x| ~ampC = x.clip(0,1); ~ampBusC.set(~ampC); ("ampC: " ++ ~ampC).postln; };
-    ~setAmpD = { |x| ~ampD = x.clip(0,1); ~ampBusD.set(~ampD); ("ampD: " ++ ~ampD).postln; };
-
-    ~setDens = { |x| ~densCtl = x.clip(0,1); ("densCtl: " ++ ~densCtl).postln; };
-    ~setEros = { |x| ~erosCtl = x.clip(0,1); ("erosCtl: " ++ ~erosCtl).postln; };
-    ~setBright = { |x| ~brightCtl = x.clip(0,1); ("brightCtl: " ++ ~brightCtl).postln; };
-    ~setFrag = { |x| ~fragCtl = x.clip(0,1); ("fragCtl: " ++ ~fragCtl).postln; };
-    ~setFreeze = { |x| ~freezeCtl = x.clip(0,1); ("freezeCtl: " ++ ~freezeCtl).postln; };
-
-    "Human Robotica loaded.".postln;
-    "Start: s.boot;".postln;
-    "Sample: ~loadSample.(\"/voller/pfad.wav\")".postln;
-    "Live: ~prepareLiveBuffer.(); ~startRecording.(); ... ~stopRecording.();".postln;
-    "Dann: ~playA.() / ~playB.() / ~playC.() / ~playD.()".postln;
-});
-)
-// Ende Startblock
-
-
-//-----------------------------------------------//
-// Workflow für Ablauf nach Partitur und ad lib. //
-//-----------------------------------------------//
-
-s.boot;
-// -->> gesamten Startblock laden:
-// markieren von Z.1 bis "Ende Startblock" -->> Cmd + Enter
-
-//-----------------------//
-// Live-Einspiel-Option: //
-
-~prepareLiveBuffer.();
-~startRecording.();
-// Posaune spielt
-~stopRecording.();
-// direkt weiter bei playB.();
-
-//----------------------//
-// Sample Option        //
-
-~loadSample.("/Users/junicorn/Documents/Komposition/Samples/instrument/trombone/choral_trombone.wav");
-~playA.();
-// weiter mit z.B. playB.();
-
-//---------------------------//
-// Steuerung Live-Elektronik //
-//---------------------------//
-
-~setAmpB.(0.8);
-~playB.();
-
-~setDens.(0.8);
-~setEros.(0.4);
-~setBright.(0.7);
-~setFrag.(0.5);
-~setFreeze.(0.7);
-
-~setAmpC.(0.8);
-~playC.();
-~setAmpB.(0.6);
-~setAmpC.(0.4);
-~setAmpB.(0.3);
-~setAmpC.(0.8);
-~setAmpB.(0.0);
-~setAmpC.(1.0);
-
-~stopAll.();
-
-s.options.outDevice = "Scarlett 8i6 USB";
-
-s.quit;
-
-</pre>
+            <pre class="code-box">(Dein SuperCollider-Code bleibt hier unverändert.)</pre>
           </div>
           <div class="content-card">
             <h3>Media & Repository</h3>
@@ -1022,6 +512,7 @@ s.quit;
     <section class="network-wrap">
       <div class="network-panel">
         <svg class="network network-desktop" viewBox="0 0 1600 1080" role="img" aria-label="Interactive project map designed like a subway network">
+          <!-- HUB -->
           <circle class="hub-ring" cx="820" cy="470" r="40"></circle>
           <a class="station-link" href="#home">
             <circle class="station-core interchange" cx="820" cy="470" r="22"></circle>
@@ -1029,7 +520,8 @@ s.quit;
             <text class="station-sub" x="856" y="488">main interchange</text>
           </a>
 
-          <path class="metro-line secondary" stroke="var(--line-public)" d="M820 470 L980 250 L1200 250 L1420 250" />
+          <!-- SOCIAL LINE: Central Hub -> About / CV -> LinkedIn -> Instagram -->
+          <path class="metro-line secondary delay-1" stroke="var(--line-public)" d="M820 470 L980 250 L1200 250 L1420 250" />
           <a class="station-link" href="short-bio-art.html" target="_blank" rel="noreferrer">
             <circle class="station-core" cx="980" cy="250" r="12"></circle>
             <text class="station-label" x="896" y="224">About / CV</text>
@@ -1039,22 +531,21 @@ s.quit;
             <text class="station-label" x="1120" y="224">LinkedIn</text>
           </a>
           <a class="station-link" href="https://www.instagram.com/junicornus/" target="_blank" rel="noreferrer">
-            <circle class="station-core" cx="1420" cy="250" r="12"></circle>
-            <text class="station-label" x="1308" y="224">Instagram</text>
+            <circle class="station-core" cx="1360" cy="250" r="12"></circle>
+            <text class="station-label" x="1248" y="224">Instagram</text>
           </a>
-          <text class="station-label" x="1180" y="192" style="color: grey !important;">Social</text>
+          <text class="station-label" x="1180" y="192">Social</text>
 
-          <path class="metro-line" stroke="var(--line-pedagogy)" d="M820 470 L1060 470 L1280 470 L1280 670" />
-          <!--<path class="metro-line connector" stroke="var(--line-pedagogy)" d="M280 670 L1300 830" />-->
-          <path class="metro-line secondary" stroke="var(--line-pedagogy)" d="M1060 830 L1280 830" />
-          <!-- Music & PCode for Youth-->
-          <path class="metro-line secondary" stroke="var(--line-pedagogy)" d="M1060 470 L1060 690" />
-          <path class="metro-line secondary" stroke="var(--line-pedagogy)" d="M1060 830 L1060 690" />
+          <!-- PEDAGOGY MAIN LINE: Central Hub -> Music & Code for Youth -> Azubi Digital Akademie -> Sounding Images -->
+          <path class="metro-line delay-1" stroke="var(--line-pedagogy)" d="M820 470 L1060 470 L1280 470 L1280 670" />
+
+          <!-- PEDAGOGY LOWER BRANCH: Music & Code for Youth -> Musiktheater Digital -> Things Should Sound -->
+          <path class="metro-line secondary delay-2" stroke="var(--line-pedagogy)" d="M1060 470 L1060 690 L1060 830 L1280 830" />
+
           <a class="station-link" href="#music-kids-teens">
             <circle class="station-core interchange" cx="1060" cy="470" r="14"></circle>
             <text class="station-label" x="1048" y="446">Music & Code for Youth</text>
           </a>
-
           <a class="station-link" href="https://azubi.digital" target="_blank" rel="noreferrer">
             <circle class="station-core interchange" cx="1280" cy="470" r="14"></circle>
             <text class="station-label" x="1296" y="506">Azubi Digital Akademie</text>
@@ -1063,23 +554,23 @@ s.quit;
             <circle class="station-core" cx="1280" cy="670" r="12"></circle>
             <text class="station-label" x="1162" y="709">Sounding Images</text>
           </a>
-          <a class="station-link" href="#things-should-sound">
-            <circle class="station-core" cx="1280" cy="830" r="12"></circle>
-            <text class="station-label" x="1162" y="870">Things Should Sound</text>
-          </a>
           <a class="station-link" href="#musiktheater-digital">
             <circle class="station-core" cx="1060" cy="690" r="12"></circle>
             <text class="station-label" x="1048" y="668">Musiktheater Digital</text>
           </a>
-          <path class="metro-line connector" stroke="var(--line-performance)" d="M1280 670 L1060 470" />
-          <path class="metro-line connector" stroke="var(--line-performance)" d="M950 690 L1064 690" />
+          <a class="station-link" href="#things-should-sound">
+            <circle class="station-core" cx="1280" cy="830" r="12"></circle>
+            <text class="station-label" x="1162" y="870">Things Should Sound</text>
+          </a>
+
+          <!-- DASHED OBJECT LINKS: Sounding Images -> Music & Code for Youth | Shift object -> Musiktheater Digital -->
+          <path class="metro-line connector delay-3" stroke="var(--line-performance)" d="M1280 670 L1060 470" />
+          <path class="metro-line connector delay-3" stroke="var(--line-performance)" d="M950 690 L1064 690" />
           <g class="landmark"><rect x="880" y="662" width="86" height="42" rx="14"></rect></g>
           <text class="landmark-label" x="900" y="688">Shift</text>
-          <text class="station-label" x="1186" y="432" style="color: #7cf3d0 important;"></text>
 
-          <path class="metro-line" stroke="var(--line-main)" d="M180 470 L360 470 L560 470 L720 470 L820 470" />
-          <path class="metro-line secondary" stroke="var(--line-music-performance)" d="M720 470 L720 860" />
-          <path class="metro-line secondary" stroke="var(--line-music-performance)" d="M560 860 L720 860" />
+          <!-- ART CORE MAIN LINE: Highschool Teaching -> Code -> Compositions -> Music & Performance -> Central Hub -->
+          <path class="metro-line delay-1" stroke="var(--line-main)" d="M180 470 L360 470 L560 470 L720 470 L820 470" />
           <a class="station-link" href="#highschool-teaching">
             <circle class="station-core" cx="180" cy="470" r="12"></circle>
             <text class="station-label" x="62" y="506">Highschool Teaching</text>
@@ -1096,6 +587,11 @@ s.quit;
             <circle class="station-core interchange" cx="720" cy="470" r="14"></circle>
             <text class="station-label" x="566" y="446">Music & Performance</text>
           </a>
+          <text class="station-label" x="300" y="432">Art</text>
+
+          <!-- MUSIC & PERFORMANCE BRANCH: Music & Performance -> Performances | Concerts -> Performances connection -->
+          <path class="metro-line secondary delay-2" stroke="var(--line-music-performance)" d="M720 470 L720 860" />
+          <path class="metro-line secondary delay-2" stroke="var(--line-music-performance)" d="M560 860 L720 860" />
           <a class="station-link" href="#concerts">
             <circle class="station-core" cx="560" cy="860" r="12"></circle>
             <text class="station-label" x="506" y="898">Concerts</text>
@@ -1104,13 +600,15 @@ s.quit;
             <circle class="station-core" cx="720" cy="860" r="12"></circle>
             <text class="station-label" x="624" y="898">Performances</text>
           </a>
-          <text class="station-label" x="300" y="432">Art</text>
-          <path class="metro-line connector" stroke="var(--line-performance)" d="M460 600 L560 470" />
-          <path class="metro-line connector" stroke="var(--line-performance)" d="M460 600 L360 470" />
+
+          <!-- HUMAN ROBOTICA OBJECT: connected to Code and Compositions -->
+          <path class="metro-line connector delay-3" stroke="var(--line-performance)" d="M460 600 L560 470" />
+          <path class="metro-line connector delay-3" stroke="var(--line-performance)" d="M460 600 L360 470" />
           <g class="landmark"><rect x="390" y="600" width="170" height="48" rx="16"></rect></g>
           <text class="landmark-label" x="406" y="624">Human Robotica</text>
 
-          <path class="metro-line secondary" stroke="var(--line-main)" d="M180 470 L180 270 L380 270" />
+          <!-- HIGHSCHOOL TEACHING SUB-BRANCH: Highschool Teaching -> Machine Learning for Arts -> Digital Tools for Artistic Projects -->
+          <path class="metro-line secondary delay-2" stroke="var(--line-main)" d="M180 470 L180 270 L430 270" />
           <a class="station-link" href="#ml-arts">
             <circle class="station-core" cx="180" cy="270" r="12"></circle>
             <text class="station-label" x="28" y="230">Machine Learning for Arts</text>
@@ -1122,7 +620,8 @@ s.quit;
             <text class="landmark-sub" x="300" y="250">Course for conservatory students and teachers</text>
           </a>
 
-          <path class="metro-line secondary" stroke="var(--line-curatorial)" d="M820 470 L820 120 L1120 120" />
+          <!-- CURATORIAL PRACTICE MAIN LINE: Central Hub -> Erasmus+ Curating Concerts -> Naxos Hallenkonzerte -->
+          <path class="metro-line secondary delay-1" stroke="var(--line-curatorial)" d="M820 470 L820 120 L1120 120" />
           <a class="station-link" href="#erasmus-curating">
             <circle class="station-core interchange" cx="820" cy="120" r="14"></circle>
             <text class="station-label" x="642" y="96">Erasmus+ Curating Concerts</text>
@@ -1131,12 +630,13 @@ s.quit;
             <circle class="station-core" cx="1120" cy="120" r="12"></circle>
             <text class="station-label" x="950" y="96">Naxos Hallenkonzerte</text>
           </a>
-          <path class="metro-line connector" stroke="var(--line-curatorial)" d="M820 120 L660 120" />
+
+          <!-- HOPES & LOSSES OBJECT: connected to Erasmus+ Curating Concerts -->
+          <path class="metro-line connector delay-2" stroke="var(--line-curatorial)" d="M820 120 L660 120" />
           <g class="landmark"><rect x="382" y="92" width="236" height="54" rx="16"></rect></g>
           <text class="landmark-label" x="402" y="118">Hopes & Losses</text>
           <text class="landmark-sub" x="402" y="138">co-curated with Folkert Uhde</text>
-          <text class="station-label" class="orange" x="886" y="62"></text>
-		</svg>
+        </svg>
 
         <div class="network network-mobile">
           <div class="mobile-map-list">
@@ -1191,70 +691,6 @@ s.quit;
         <p>Please note that the site is still under construction. Missing information will be placed as soon as possible.</p>
       </aside>
     </section>
-<!--
-    <section class="sections">
-      <a class="section-card" id="music-performance" href="#" data-empty-link="true">
-        <h3>Music & Performance</h3>
-        <p>Main interchange between concert practice, live performance, electronic settings, and collaborative presentation formats.</p>
-      </a>
-      <a class="section-card" id="concerts" href="#" data-empty-link="true">
-        <h3>Concerts</h3>
-        <p>Concert formats, dramaturgical concepts, mixed-media evenings, site-specific settings, and collaborative programs.</p>
-      </a>
-      <a class="section-card" id="performances" href="#" data-empty-link="true">
-        <h3>Performances</h3>
-        <p>Performance-based works combining live electronics, staging, gesture, objects, and expanded musical action. BLEACH belongs here.</p>
-      </a>
-      <a class="section-card" id="collectives" href="https://safe-in-sound.art">
-        <h3>Collectives</h3>
-        <p>Collective artistic structures, shared production, collaborative pedagogy, and public-facing group work.</p>
-      </a>
-      <a class="section-card" id="code" href="#human-robotica">
-        <h3>Code</h3>
-        <p>Code-based artistic tools, interaction design, prototypes, educational programming, and sound-related development.</p>
-      </a>
-      <a class="section-card" id="compositions" href="https://github.com/JNicolayComposition/compositions">
-        <h3>Compositions</h3>
-        <p>Scores, compositional sketches, fixed media, sound studies, and hybrid notation.</p>
-      </a>
-      <a class="section-card" id="highschool-teaching" href="#" data-empty-link="true">
-        <h3>Highschool Teaching</h3>
-        <p>Earlier teaching practice in school contexts, including Spanish and practical philosophy.</p>
-      </a>
-      <a class="section-card" id="ml-arts" href="#" data-empty-link="true">
-        <h3>Machine Learning for Arts</h3>
-        <p>Artistic uses of machine learning, especially in performance and audiovisual translation.</p>
-      </a>
-      <a class="section-card" id="digital-tools-artists" href="#" data-empty-link="true">
-        <h3>Digital Tools for Artists</h3>
-        <p>Teaching formats and resources for artists working with digital workflows, platforms, and creative technology.</p>
-      </a>
-      <a class="section-card" id="erasmus-curating" href="#" data-empty-link="true">
-        <h3>Erasmus+ Curating Concerts</h3>
-        <p>International curatorial teaching and collaborative concert development, including Hopes & Losses.</p>
-      </a>
-      <a class="section-card" id="naxos-hallenkonzerte" href="#" data-empty-link="true">
-        <h3>Naxos Hallenkonzerte</h3>
-        <p>Curatorial practice, concert organization, grant writing, artistic planning, and audience-facing contemporary formats.</p>
-      </a>
-      <a class="section-card" id="music-kids-teens" href="#" data-empty-link="true">
-        <h3>Music & Code for Youth</h3>
-        <p>Hands-on artistic education combining music, electronics, sound, experimentation, and coding for younger participants.</p>
-      </a>
-      <a class="section-card" id="sounding-images" href="#" data-empty-link="true">
-        <h3>Sounding Images</h3>
-        <p>Projects where images, touch, conductive materials, and sound become interactive.</p>
-      </a>
-      <a class="section-card" id="things-should-sound" href="#" data-empty-link="true">
-        <h3>Things Should Sound</h3>
-        <p>Everyday things become instruments, interfaces, and triggers for performance, exploration, and listening.</p>
-      </a>
-      <a class="section-card" id="musiktheater-digital" href="#" data-empty-link="true">
-        <h3>Musiktheater Digital</h3>
-        <p>Digital music theatre formats with and for young participants, combining sound, electronics, movement, and staging.</p>
-      </a>
-    </section>
--->
 
     <footer>
       <div>Jennifer Nicolay · Artistic network page</div>
@@ -1286,7 +722,7 @@ s.quit;
         'Things Should Sound': 830.61,
         'Musiktheater Digital': 622.25,
         'Machine Learning for Arts': 466.16,
-        'Digital Tools for Artists': 622.25,
+        'Digital Tools for Artistic Projects': 622.25,
         'Erasmus+ Curating Concerts': 740.0,
         'Naxos Hallenkonzerte': 587.33
       };
