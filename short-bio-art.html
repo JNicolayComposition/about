@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jennifer Nicolay – Artistic CV</title>
+  <title>Jennifer Nicolay – Artistic Bio</title>
   <style>
     :root {
       --bg: #380997;
@@ -12,13 +12,16 @@
       --accent: #f8f679;
       --card: #4916af;
       --line: rgba(248, 246, 121, 0.18);
-      --shadow: rgba(0, 0, 0, 0.25);
       --link: #91b3d5;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --line-main: #f8f679;
+      --line-public: #91b3d5;
+      --line-performance: #f39cff;
+      --line-pedagogy: #7cf3d0;
+      --line-curatorial: #ffb86a;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -41,17 +44,22 @@
     }
 
     .page {
-      width: min(900px, calc(100% - 32px));
+      width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 36px 0 56px;
+      padding: 32px 0 56px;
     }
 
+    .hero,
     .card {
       background: rgba(73, 22, 175, 0.82);
       border: 1px solid var(--line);
       border-radius: 28px;
       box-shadow: 0 20px 40px var(--shadow);
+    }
+
+    .hero {
       padding: 30px;
+      margin-bottom: 20px;
     }
 
     .eyebrow {
@@ -63,49 +71,258 @@
       margin-bottom: 16px;
     }
 
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .photo {
+      width: 180px;
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(135deg, rgba(248,246,121,0.08), rgba(145,179,213,0.08)),
+        rgba(255,255,255,0.04);
+      background-image: url('https://github.com/JNicolayComposition/about/jnicolay.jpg')
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 16px;
+    }
+
     h1 {
-      margin: 0 0 18px;
+      margin: 0 0 14px;
       color: var(--accent);
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 0.95;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 0.94;
       text-transform: uppercase;
       letter-spacing: 0.02em;
     }
 
     .intro {
+      margin: 0;
+      max-width: 760px;
       color: var(--text);
-      font-size: 1.02rem;
-      margin: 0 0 28px;
+      font-size: 1.04rem;
       text-align: justify;
       text-justify: inter-word;
       hyphens: auto;
     }
 
-    .section {
-      margin-top: 28px;
-      padding-top: 20px;
+    .station-strip {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+    }
+
+    .station {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      font-size: 0.93rem;
+    }
+
+    .station-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--text);
+      flex: 0 0 auto;
+    }
+
+    .main { background: var(--line-main); border-color: #2f116b; }
+    .public { background: var(--line-public); }
+    .pedagogy { background: var(--line-pedagogy); }
+    .performance { background: var(--line-performance); }
+    .curatorial { background: var(--line-curatorial); }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+
+    .card { padding: 26px; }
+
+    .section + .section {
+      margin-top: 22px;
+      padding-top: 18px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
     .section h2 {
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       color: var(--accent);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
 
     .section p {
-      margin: 0 0 14px;
+      margin: 0;
       color: var(--muted);
       text-align: justify;
       text-justify: inter-word;
       hyphens: auto;
     }
 
+    .mini-map-wrap {
+      margin-bottom: 18px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+    }
+
+    .mini-map {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .metro-line {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 12;
+      opacity: 0.95;
+      stroke-dasharray: 460;
+      stroke-dashoffset: 460;
+      animation: drawLine 1.8s ease forwards;
+    }
+
+    .metro-line.delay-1 { animation-delay: 0.2s; }
+    .metro-line.delay-2 { animation-delay: 0.4s; }
+    .metro-line.delay-3 { animation-delay: 0.6s; }
+    .metro-line.delay-4 { animation-delay: 0.8s; }
+
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .mini-station {
+      cursor: pointer;
+      outline: none;
+    }
+
+    .mini-halo {
+      opacity: 0;
+      transform-origin: center;
+      transition: opacity 0.2s ease;
+    }
+
+    .mini-station:hover .mini-halo,
+    .mini-station:focus-visible .mini-halo,
+    .mini-station.active .mini-halo {
+      opacity: 1;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.88); }
+      50% { transform: scale(1.18); }
+      100% { transform: scale(0.92); }
+    }
+
+    .mini-node {
+      fill: var(--card);
+      stroke: var(--text);
+      stroke-width: 3;
+      transition: stroke 0.2s ease, filter 0.2s ease;
+    }
+
+    .mini-node.interchange {
+      fill: var(--accent);
+      stroke: #2f116b;
+    }
+
+    .mini-station:hover .mini-node,
+    .mini-station:focus-visible .mini-node,
+    .mini-station.active .mini-node {
+      stroke: var(--accent);
+      filter: drop-shadow(0 0 12px rgba(248,246,121,0.55));
+    }
+
+    .mini-label {
+      fill: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .mini-sub {
+      fill: var(--muted);
+      font-size: 11px;
+    }
+
+    .mini-detail {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 86px;
+    }
+
+    .mini-detail strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-detail span {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .facts {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fact {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .fact strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .fact span {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
     .back-link {
       display: inline-block;
-      margin-top: 26px;
+      margin-top: 22px;
       padding: 10px 14px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.14);
@@ -113,61 +330,191 @@
       color: var(--text);
     }
 
+    @media (max-width: 860px) {
+      .hero-grid,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .photo { width: 150px; }
+    }
+
     @media (max-width: 640px) {
       .page {
-        width: min(100% - 16px, 900px);
+        width: min(100% - 16px, 1120px);
         padding: 20px 0 36px;
       }
-
+      .hero,
       .card {
-        padding: 22px;
         border-radius: 20px;
+        padding: 22px;
       }
+      .station-strip { gap: 8px; }
+      .mini-label { font-size: 13px; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="card">
-      <span class="eyebrow">Artistic CV</span>
-      <h1>Jennifer Nicolay</h1>
-
-      <p class="intro">
-        Jennifer Nicolay is a Frankfurt-based artist, composer, educator, and digital developer working across
-        composition, live electronics, performance, participatory artistic formats, and digital mediation.
-        Her practice connects sound, code, pedagogy, curatorial thinking, and collaborative creation.
-      </p>
-
-      <div class="section">
-        <h2>Profile</h2>
-        <p>
-          Her artistic work moves between contemporary music, interdisciplinary performance, electronic sound,
-          and hybrid formats that combine acoustic instruments, digital tools, spatial thinking, and conceptual design.
-          A particular focus lies in linking artistic experimentation with social relevance and educational practice.
-        </p>
+    <section class="hero">
+      <span class="eyebrow">Artistic Bio</span>
+      <div class="hero-grid">
+        <div class="photo">Photo<br />Credits: Roberto Kressner</div>
+        <div>
+          <h1>Jennifer Nicolay</h1>
+          <p class="intro">
+            I am a Frankfurt-based artist, composer, educator, and digital developer
+            working across composition, live electronics, performance, participatory artistic formats,
+            and digital mediation. Her practice connects sound, code, pedagogy, curatorial thinking,
+            and collaborative creation.
+          </p>
+          <div class="station-strip" aria-label="Key artistic fields">
+            <span class="station"><span class="station-dot main"></span>Composition</span>
+            <span class="station"><span class="station-dot performance"></span>Performance</span>
+            <span class="station"><span class="station-dot pedagogy"></span>Pedagogy</span>
+            <span class="station"><span class="station-dot curatorial"></span>Curatorial Practice</span>
+            <span class="station"><span class="station-dot public"></span>Digital Development</span>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="section">
-        <h2>Current Focus</h2>
-        <p>
-          Current focal points include contemporary music performance, live electronics, machine learning for artistic
-          practice, collaborative concert dramaturgy, and music-and-electronics projects with children and young people.
-          She develops artistic and pedagogical formats in which sound, movement, objects, code, and participation
-          become equally important compositional elements.
-        </p>
-      </div>
+    <section class="content-grid">
+      <article class="card">
+        <div class="section">
+          <h2>Profile</h2>
+          <p>
+            Her artistic work moves between contemporary music, interdisciplinary performance,
+            electronic sound, and hybrid formats that combine acoustic instruments, digital tools,
+            spatial thinking, and conceptual design. A particular focus lies in linking artistic
+            experimentation with social relevance and educational practice.
+          </p>
+        </div>
 
-      <div class="section">
-        <h2>Artistic Practice</h2>
-        <p>
-          Her work includes compositions, live electronic settings, performance concepts, educational workshop formats,
-          curatorial collaboration, and digital development. Across these fields, she is interested in liminality,
-          resonance, transformation, memory, and the aesthetic possibilities of technological mediation.
-        </p>
-      </div>
+        <div class="section">
+          <h2>Current Focus</h2>
+          <p>
+            Current focal points include contemporary music performance, live electronics, machine
+            learning for artistic practice, collaborative concert dramaturgy, and music-and-electronics
+            projects with children and young people. She develops artistic and pedagogical formats in
+            which sound, movement, objects, code, and participation become equally important compositional elements.
+          </p>
+        </div>
 
-      <a class="back-link" href="index.html">← Back to network map</a>
+        <div class="section">
+          <h2>Artistic Practice</h2>
+          <p>
+            Her work includes compositions, live electronic settings, performance concepts, educational
+            workshop formats, curatorial collaboration, and digital development. Across these fields,
+            she is interested in liminality, resonance, transformation, memory, and the aesthetic
+            possibilities of technological mediation.
+          </p>
+        </div>
+
+        <a class="back-link" href="index.html">← Back to network map</a>
+      </article>
+
+      <aside class="card">
+        <div class="mini-map-wrap">
+          <svg class="mini-map" viewBox="0 0 420 360" role="img" aria-label="Mini artistic map">
+            <path class="metro-line" stroke="var(--line-main)" d="M28 78 L148 78 L255 78" />
+            <path class="metro-line delay-1" stroke="var(--line-performance)" d="M255 78 L255 172 L255 280" />
+            <path class="metro-line delay-2" stroke="var(--line-pedagogy)" d="M255 78 L352 78 L352 196" />
+            <path class="metro-line delay-3" stroke="var(--line-curatorial)" d="M148 78 L148 196 L52 196" />
+            <path class="metro-line delay-4" stroke="var(--line-public)" d="M255 78 L330 34 L388 34" />
+
+            <g class="mini-station" tabindex="0" data-title="Code" data-description="Programming, digital tools, experimental interfaces, and technical prototyping.">
+              <circle class="mini-halo" cx="28" cy="78" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="28" cy="78" r="8"></circle>
+              <text class="mini-label" x="14" y="58">Code</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Composition" data-description="Scores, fixed media, hybrid notation, and compositional research.">
+              <circle class="mini-halo" cx="148" cy="78" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="148" cy="78" r="8"></circle>
+              <text class="mini-label" x="96" y="58">Composition</text>
+            </g>
+
+            <g class="mini-station active" tabindex="0" data-title="Artistic Core" data-description="Intersection of artistic creation, digital systems, collaboration, and performance thinking.">
+              <circle class="mini-halo" cx="255" cy="78" r="22" fill="rgba(248,246,121,0.18)"></circle>
+              <circle class="mini-node interchange" cx="255" cy="78" r="10"></circle>
+              <text class="mini-label" x="214" y="58">Art</text>
+              <text class="mini-sub" x="206" y="100">interchange</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Performance" data-description="Performance-based work with live electronics, staging, gesture, and expanded musical action.">
+              <circle class="mini-halo" cx="255" cy="172" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="255" cy="172" r="8"></circle>
+              <text class="mini-label" x="280" y="177">Performance</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Live Electronics" data-description="Signal flow, sound processing, machine learning, spatial thinking, and interactive systems.">
+              <circle class="mini-halo" cx="255" cy="280" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="255" cy="280" r="8"></circle>
+              <text class="mini-label" x="280" y="285">Music & Code for Youth</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Pedagogy" data-description="Participatory workshop formats, youth projects, music-and-electronics education, and collective learning.">
+              <circle class="mini-halo" cx="352" cy="196" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="352" cy="196" r="8"></circle>
+              <text class="mini-label" x="230" y="226">ADA Code Teaching</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Curatorial Practice" data-description="Concert dramaturgy, collaborative artistic planning, and curatorial development.">
+              <circle class="mini-halo" cx="52" cy="196" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="52" cy="196" r="8"></circle>
+              <text class="mini-label" x="14" y="226">Curatorial</text>
+            </g>
+
+            <g class="mini-station" tabindex="0" data-title="Digital Practice" data-description="Web projects, digital visibility, experimental media, and public-facing technological practice.">
+              <circle class="mini-halo" cx="388" cy="34" r="18" fill="rgba(248,246,121,0.14)"></circle>
+              <circle class="mini-node" cx="388" cy="34" r="8"></circle>
+              <text class="mini-label" x="275" y="24">What shaped me</text>
+            </g>
+          </svg>
+
+          <div class="mini-detail" id="mini-detail">
+            <strong>Artistic Core</strong>
+            <span>Intersection of artistic creation, digital systems, collaboration, and performance thinking.</span>
+          </div>
+        </div>
+
+        <div class="facts">
+          <div class="fact">
+            <strong>Based in</strong>
+            <span>Frankfurt am Main</span>
+          </div>
+          <div class="fact">
+            <strong>Works across</strong>
+            <span>Composition, performance, live electronics, pedagogy, code, curatorial collaboration</span>
+          </div>
+          <div class="fact">
+            <strong>Interests</strong>
+            <span>Liminality, resonance, transformation, memory, participation, technological mediation</span>
+          </div>
+        </div>
+      </aside>
     </section>
   </main>
+
+  <script>
+    (() => {
+      const stations = Array.from(document.querySelectorAll('.mini-station'));
+      const detail = document.getElementById('mini-detail');
+
+      stations.forEach((station) => {
+        const activate = () => {
+          stations.forEach((s) => s.classList.remove('active'));
+          station.classList.add('active');
+          const title = station.dataset.title || '';
+          const description = station.dataset.description || '';
+          detail.innerHTML = `<strong>${title}</strong><span>${description}</span>`;
+        };
+
+        station.addEventListener('mouseenter', activate);
+        station.addEventListener('focus', activate);
+        station.addEventListener('click', activate);
+      });
+    })();
+  </script>
 </body>
 </html>
